@@ -37,7 +37,7 @@ export const PICTOGRAMAS: Pictograma[] = [
   { id: 'n2', etiqueta: 'Agua', simbolo: '💧', categoria: 'necesidades', frase: 'Tengo sed, quiero agua' },
   { id: 'n3', etiqueta: 'Ayuda', simbolo: '🆘', categoria: 'necesidades', frase: 'Necesito ayuda, por favor' },
   { id: 'n4', etiqueta: 'Dormir', simbolo: '🛏️', categoria: 'necesidades', frase: 'Quiero dormir' },
-  { id: 'n5', etiqueta: 'Frío', simbolo: '🥶', categoria: 'necesidades', frase: 'Tengo frío' },
+  { id: 'n5', etiqueta: 'Frío', simbolo: '🥶', categoria: 'necesidades', frase: 'Tengo frío a cha chai' },
   { id: 'n6', etiqueta: 'Calor', simbolo: '🥵', categoria: 'necesidades', frase: 'Tengo calor' },
   { id: 'n7', etiqueta: 'Me duele', simbolo: '🤕', categoria: 'necesidades', frase: 'Me duele' },
   { id: 'n8', etiqueta: 'Medicina', simbolo: '💊', categoria: 'necesidades', frase: 'Necesito mi medicina' },
@@ -75,6 +75,7 @@ export const PICTOGRAMAS: Pictograma[] = [
   { id: 'a7', etiqueta: 'Bañarme', simbolo: '🛁', categoria: 'acciones', frase: 'Quiero bañarme' },
   { id: 'a8', etiqueta: 'Sí', simbolo: '✅', categoria: 'acciones', frase: 'Sí' },
   { id: 'a9', etiqueta: 'No', simbolo: '❌', categoria: 'acciones', frase: 'No' },
+  { id: 'a10', etiqueta: 'Bailar', simbolo: '💃🏼', categoria: 'acciones', frase: 'Bailar' },
 ];
 
 /** Devuelve los pictogramas de una categoría. */
