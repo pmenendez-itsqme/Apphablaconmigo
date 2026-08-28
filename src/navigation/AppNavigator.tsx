@@ -3,15 +3,45 @@ import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import BienvenidaScreen from '../screens/BienvenidaScreen';
 import CategoriaScreen from '../screens/CategoriaScreen';
 import EmocionesScreen from '../screens/EmocionesScreen';
 import FavoritosScreen from '../screens/FavoritosScreen';
 import InicioScreen from '../screens/InicioScreen';
 import { colores } from '../theme/estilos';
-import type { StackParams } from './types';
+import type { RootStackParams, StackParams } from './types';
 
+/**
+ * ============================================================
+ *  NAVEGACIÓN  (uno de los tres pilares del proyecto)
+ * ============================================================
+ *
+ * La app usa los DOS tipos de navegación más habituales:
+ *
+ *   Pestañas (Bottom Tabs) ......... para saltar entre secciones
+ *   Pila (Stack) ................... para entrar y volver dentro de una
+ *
+ * Estructura completa — hay TRES navegadores anidados:
+ *
+ *   Pila raíz
+ *   ├── Bienvenida                        (fuera de las pestañas)
+ *   └── Principal ──> Pestañas
+ *                     ├── Tablero ──> Pila
+ *                     │               ├── Inicio     (lista de categorías)
+ *                     │               └── Categoria  (sus pictogramas)
+ *                     ├── Emociones
+ *                     └── Favoritos
+ *
+ * La bienvenida está en la pila RAÍZ y no dentro de las pestañas a propósito:
+ * si estuviera dentro, aparecería como una pestaña más en la barra de abajo,
+ * y es una pantalla que solo se ve una vez.
+ */
+
+// Los tipos de las rutas viven en `types.ts` (ver el comentario de ese
+// archivo: evita un círculo de importaciones con las pantallas).
 const Stack = createNativeStackNavigator<StackParams>();
 const Tabs = createBottomTabNavigator();
+const Raiz = createNativeStackNavigator<RootStackParams>();
 
 /** Opciones de cabecera compartidas por pila y pestañas. */
 const cabecera = {
@@ -50,7 +80,8 @@ function icono(simbolo: string) {
   };
 }
 
-export default function AppNavigator() {
+/** Las tres pestañas. Ya no es el navegador raíz: cuelga de la pila de abajo. */
+function Pestanas() {
   return (
     <Tabs.Navigator
       screenOptions={{
@@ -93,5 +124,21 @@ export default function AppNavigator() {
         }}
       />
     </Tabs.Navigator>
+  );
+}
+
+/**
+ * Navegador raíz: bienvenida primero, después toda la app.
+ *
+ * Las dos pantallas van sin cabecera. La bienvenida no la necesita porque se
+ * presenta sola, y `Principal` la oculta porque las pestañas de dentro pintan
+ * la suya: si no, saldrían dos barras de título apiladas.
+ */
+export default function AppNavigator() {
+  return (
+    <Raiz.Navigator screenOptions={{ headerShown: false }}>
+      <Raiz.Screen name="Bienvenida" component={BienvenidaScreen} />
+      <Raiz.Screen name="Principal" component={Pestanas} />
+    </Raiz.Navigator>
   );
 }
