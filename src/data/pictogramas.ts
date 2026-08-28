@@ -75,7 +75,7 @@ export const PICTOGRAMAS: Pictograma[] = [
   { id: 'a7', etiqueta: 'Bañarme', simbolo: '🛁', categoria: 'acciones', frase: 'Quiero bañarme' },
   { id: 'a8', etiqueta: 'Sí', simbolo: '✅', categoria: 'acciones', frase: 'Sí' },
   { id: 'a9', etiqueta: 'No', simbolo: '❌', categoria: 'acciones', frase: 'No' },
-  { id: 'a10', etiqueta: 'Bailar', simbolo: '💃🏼', categoria: 'acciones', frase: 'Bailar' },
+  { id: 'a10', etiqueta: 'Bailar', simbolo: '💃🏼', categoria: 'acciones', frase: 'Quiero Bailar contigo baby' },
 ];
 
 /** Devuelve los pictogramas de una categoría. */
