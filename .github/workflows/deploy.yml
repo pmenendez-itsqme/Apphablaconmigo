@@ -1,0 +1,74 @@
+# Publica la versión web de la app en GitHub Pages.
+#
+# Cada vez que se haga push a `main`, GitHub compila el proyecto y actualiza
+# la página. No hay que subir nada a mano.
+#
+# REQUISITO: en GitHub, Settings → Pages → Source debe estar en
+# "GitHub Actions". Si está en "Deploy from a branch", se publicaría el
+# README en lugar de la app.
+
+name: Desplegar en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Permite lanzarlo a mano desde la pestaña Actions.
+  workflow_dispatch:
+
+# Permisos que necesita el despliegue.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si se empujan dos commits seguidos, se cancela el despliegue anterior
+# para que no se pisen entre ellos.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # `npm ci` en vez de `npm install`: instala exactamente las versiones
+      # del package-lock.json, así la compilación es reproducible.
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Comprobar los tipos
+        run: npx tsc --noEmit
+
+      - name: Exportar la web
+        run: npx expo export --platform web
+
+      # Jekyll (que GitHub usa por defecto) ignora las carpetas que empiezan
+      # por guion bajo, y el JavaScript de Expo vive en `_expo/`. Este archivo
+      # vacío desactiva Jekyll. Sin él la página carga en blanco.
+      - name: Desactivar Jekyll
+        run: touch dist/.nojekyll
+
+      - name: Preparar el artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publicar:
+    needs: compilar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - name: Publicar en Pages
+        id: despliegue
+        uses: actions/deploy-pages@v4
